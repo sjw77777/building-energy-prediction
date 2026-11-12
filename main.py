@@ -20,7 +20,7 @@ st.set_page_config(
 st.title("⚡ 머신러닝 기반 건물 에너지 소비량 예측 시스템")
 st.write("전처리된 데이터를 바탕으로 다중 선형 회귀 모델을 학습시키고, 환경 조건에 따른 에너지 사용량을 예측합니다.")
 
-# 1. 데이터 로드
+# 1. 데이터 로드 (캐시 적용)
 @st.cache_data
 def load_data():
     return pd.read_csv('Energy_consumption_cleaned (1).csv')
@@ -36,8 +36,8 @@ try:
             st.dataframe(df.head(), use_container_width=True)
         with col2:
             st.write("**데이터프레임 정보 (`info`)**")
-            buf = []
-            df.info(buf=buffer := [])
+            buffer = []
+            df.info(buf=buffer)
             st.text("".join(buffer))
 
     # 상관관계 시각화
