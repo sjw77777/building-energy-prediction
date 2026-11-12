@@ -28,17 +28,20 @@ def load_data():
 try:
     df = load_data()
 
-    # 데이터 요약 섹션
+    # 데이터 요약 섹션 (에러 원인이었던 info 대신 dtypes와 describe 사용)
     with st.expander("📁 데이터셋 구조 및 샘플 확인하기"):
         col1, col2 = st.columns(2)
         with col1:
             st.write("**상위 5개 데이터 샘플**")
             st.dataframe(df.head(), use_container_width=True)
         with col2:
-            st.write("**데이터프레임 정보 (`info`)**")
-            buffer = []
-            df.info(buf=buffer)
-            st.text("".join(buffer))
+            st.write("**변수별 데이터 타입 및 결측치 현황**")
+            info_df = pd.DataFrame({
+                '컬럼명': df.columns,
+                '데이터 타입': df.dtypes.astype(str),
+                '결측치 수': df.isnull().sum()
+            })
+            st.dataframe(info_df, use_container_width=True, hide_index=True)
 
     # 상관관계 시각화
     st.subheader("📊 변수 간 상관관계 분석 (Heatmap)")
